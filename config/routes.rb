@@ -7,7 +7,9 @@ AssociationsExample::Application.routes.draw do
 
   get "items/edit"
 
-  resources :orders
+  resources :orders do 
+    resources :items
+  end
 
 
   # The priority is based upon order of creation:
