@@ -1,2 +1,4 @@
-<h1>Items#edit</h1>
-<p>Find me in app/views/items/edit.html.erb</p>
+<h1>Editing item</h1> 
+<%= render 'form' %>
+<%= link_to 'Show', order_item_path(@order, @item) %> | 
+<%= link_to 'Back', order_items_path(@order) %>
