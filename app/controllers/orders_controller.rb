@@ -1,81 +1,83 @@
 class OrdersController < ApplicationController
-  # GET /orders/1/items
+  # GET /orders
+  # GET /orders.json
   def index
-    # For URL like /orders/1/items
-    # Get the order with id=1
-    @order = Order.find(params[:order_id])
-    # Access all items for that order
-    @items = @order.items
-  end
+    @orders = Order.all
 
-
-  # GET /orders/1/items/2
-  def show
-    @order = Order.find(params[:order_id])
-    # For URL like /orders/1/items/2
-    # Find an item in orders 1 that has id=2 
-    @item = @order.items.find(params[:id])
-  end
-
-
-  # GET /orders/1/items/new
-  def new
-    @order = Order.find(params[:order_id])
-    # Associate an item object with order 1
-    @item = @order.items.build
-  end
-
-
-  # POST /orders/1/items
-  def create
-    @order = Order.find(params[:order_id])
-    # For URL like /orders/1/items
-    # Populate an item associate with order 1 with form data # Order will be associated with the item
-    @item = @order.items.build(params[:item])
-    if @item.save
-      # Save the item successfully
-      redirect_to order_item_url(@order, @item)
-    else
-      render :action => "new"
-    end 
-  end
-
-
-  # GET /orders/1/items/2/edit 
-  def edit
-    @order = Order.find(params[:order_id])
-    # For URL like /orders/1/items/2/edit 
-    # Get item id=2 for order 1
-    @item = @order.items.find(params[:id])
-  end
-
-
-  # PUT /orders/1/items/2
-  def update
-    @order = Order.find(params[:order_id]) 
-    @item = Item.find(params[:id])
-    if @item.update_attributes(params[:item])
-      # Save the item successfully
-      redirect_to order_item_url(@order, @item)
-    else
-      render :action => "edit"
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @orders }
     end
   end
 
+  # GET /orders/1
+  # GET /orders/1.json
+  def show
+    @order = Order.find(params[:id])
 
-  # DELETE /orders/1/items/2
-  def destroy
-    @order = Order.find(params[:order_id]) 
-    @item = Item.find(params[:id]) 
-    @item.destroy
-    
     respond_to do |format|
-      format.html { redirect_to order_items_path(@order) } 
-      format.xml { head :ok }
-    end 
+      format.html # show.html.erb
+      format.json { render json: @order }
+    end
   end
 
+  # GET /orders/new
+  # GET /orders/new.json
+  def new
+    @order = Order.new
 
+    respond_to do |format|
+      format.html # new.html.erb
+      format.json { render json: @order }
+    end
+  end
 
+  # GET /orders/1/edit
+  def edit
+    @order = Order.find(params[:id])
+  end
 
+  # POST /orders
+  # POST /orders.json
+  def create
+    @order = Order.new(params[:order])
+
+    respond_to do |format|
+      if @order.save
+        format.html { redirect_to @order, notice: 'Order was successfully created.' }
+        format.json { render json: @order, status: :created, location: @order }
+      else
+        format.html { render action: "new" }
+        format.json { render json: @order.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # PUT /orders/1
+  # PUT /orders/1.json
+  def update
+    @order = Order.find(params[:id])
+
+    respond_to do |format|
+      if @order.update_attributes(params[:order])
+        format.html { redirect_to @order, notice: 'Order was successfully updated.' }
+        format.json { head :no_content }
+      else
+        format.html { render action: "edit" }
+        format.json { render json: @order.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # DELETE /orders/1
+  # DELETE /orders/1.json
+  def destroy
+    @order = Order.find(params[:id])
+    @order.destroy
+
+    respond_to do |format|
+      format.html { redirect_to orders_url }
+      format.json { head :no_content }
+    end
+  end
 end
